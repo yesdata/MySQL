@@ -1,0 +1,98 @@
+1、MySQL默认配置文件是在哪里？
+
+/etc/my.cnf 
+2、配置文件和MySQL文件夹，我们是不是都要赋权限给用户和用户组
+
+是的，都需要赋权限
+3、解压后必然要做一件事情是什么
+
+查看权限
+4、允许所有IP可以访问，用什么表示
+
+%
+5、允许192.169.所有网段访问，那么该怎么表示
+
+192.169.%.%
+6、赋予权限的最后一个命令
+
+flush privileges;
+
+例如：
+    create database 数据库名;
+    grant all privileges on 数据库名.* to 某个用户名@'%' identified by '密码';
+    flush privileges;
+7、插入一条语句的语法
+
+insert into 表名 values(字段1，字段2……)
+例如：
+    添加全部的数据：
+        insert into user values(1,'name',23);
+    添加指定某个字段的数据：
+        insert into user(name,age) values('name',12);
+8、更新一条数据的语法
+
+update 表名 set 要修改的字段=修改的内容 where 字段=值
+例如：
+    修改指定的数据：
+        update user set name='wewe' where id=1;
+    修改全部的数据：
+        update user set name='wewe';
+9、删除一条的语句
+
+delete from 表名 where 字段=值
+例如：
+    删除全部的数据：
+        delete from user;
+    删除指定的某个数据：
+        delete from user where id=1;
+10、查询一张表的语句
+
+select * from 表名 where 字段=值;
+例如：
+    查询全部的数据：
+        select * from user;
+    查询符合某个字段的信息：
+        select * from user where id=1;
+    查询指定字段的数据：
+        select name,age from user;
+11、排序的语法
+
+order by xxx desc/asc
+例如：
+    如果不指定顺序，默认为升序：
+        select * from user order by id;
+    降序：
+        select * from user order by id desc;
+    升序：
+        select * from user order by id asc;
+12、降序是什么
+
+降序是desc
+例如：
+    select * from user order by id desc;
+13、聚合函数有哪些
+
+求和：  sum()
+求数量：count()
+求平均：avg()
+例如：
+    求数量：
+        select COUNT(category_id) from tb_content;
+    求和：
+        select SUM(category_id) from tb_content;
+    求平均：
+        select AVG(category_id) from tb_content;
+14、聚合语法是什么，也就是分组语法
+
+select 列1,列2……,sum(字段) from 表名 group by 列1,列2…… having sum(字段) > 某个数量;
+15、分组语法谨记一个点是什么
+
+不是聚合函数的字段要出现在group by 后面
+16、分组语法有个取多少行的语法是什么？比如工资和大于5000
+
+limit
+例如：
+    select id from tb_content group by id having sum(money) > 5000 LIMIT 2;
+17、left join哪个表数据最全？谁去匹配？匹配不上，用什么表示
+
+左边的表最全，右边的表去匹配，匹配不上用null表示

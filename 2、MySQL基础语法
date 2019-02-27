@@ -1,0 +1,178 @@
+Linux命令补充
+
+Windows和Linux之间是rz sz
+
+scp：
+
+A机器（Linux）将文件或者文件夹传到B机器（Linux）
+scp xxx.log root@xxx.xxx.xxx.xxxIP地址:/xxx/xxx
+scp -r /xxx root@xxx.xxx.xxx.xxxIP地址:/xxx/xxx
+
+A机器用xxx用户发送：
+scp xxx.log IP地址:/xxx/xxx
+
+等价于
+scp xxx@IP地址:/xxxx/xxxx
+
+软连接：
+
+路径：
+绝对路径：cd /xxx/xxx/xxx
+相对路径：cd xxxx
+ln -s 实际路径 软连接路径(最好使用绝对路径)
+MySQL的基本概念
+
+database db ：数据库
+table ： 表
+db1：t1, t2, t3
+db2：t2, t3, t4
+字段类型
+
+http://www.runoob.com/mysql/mysql-data-types.html
+
+整数型：int
+小数型：float/double
+字符：char
+字符串：varchar
+时间：timestamp
+常规命令
+
+使用某个数据库
+
+use 数据库名;
+查看数据库下面所有的表
+
+show tables;
+查看某个表的表结构
+
+show create table 表名;
+创建数据库
+
+create database 数据库名;
+创建表
+
+create table 数据库名.表名(字段 类型,……)
+例如：
+    create table user(
+        id int,
+        name varchar(128),
+        memory double,
+        sex char(1),
+        do varchar(100),
+        cretime timestamp
+    )CHARSET=utf8;
+删除表
+
+drop table 表名;
+插入数据
+
+insert into 数据库名.表名(列名) values(对应的值);
+例如：
+insert into user(id,name,memory,sex,do,cretime) values(1,'小米',10.22,'b','在打游戏','2017-12-11 00:00:00');
+
+insert into user values(1,'小米',10.22,'b','在打游戏','2017-12-11 00:00:00');
+
+insert into user(id, name) values(1,'小米');
+查询
+
+select 字段 from 数据库名.表名;
+例如
+
+select * from user;
+select * from user where id=3;
+*：查询所有的列
+更新
+
+update 数据库名.表名 set 字段名称=新的值
+
+例如：
+update user set sex='g' where id=1;修改id为1的数据
+
+update user set sex='g';修改全部的行
+删除
+
+delete from 数据库名.表名
+例如：
+delete from user;删除所有的数据，慎用
+delete from user where id=3;删除id为3的数据
+排序
+
+order by xxx desc | asc
+例如：
+select * from user order by cretime 
+
+select * from user order by cretime desc; 
+select * from user order by cretime asc;
+只取多少行数据
+
+limit n
+例如：
+select * from user limit 2;
+聚合语法
+
+select 列1,列2……,sum(memory) from user group by 列1,列2…… having sum(memory) > 3000
+聚合函数
+
+count() : 求数量
+sum() : 求和
+avg() ： 求平均
+字段别名
+
+as xxx
+等价SQL：使用子查询语法
+
+select * from(select dept, sum(sal) as sum_sal from salary group by dept) t where t.sum_sql > 5000;
+两张表关联：
+
+左连接：
+A left join B on A.字段=B.字段  工作中用的最多 A表数据最全 <-- B表补全
+
+右连接：
+A right join B on A.字段=B.字段     A表补全 --> B表数据最全
+
+内连接：
+A inner join B on A.字段=B.字段  慎用
+
+注意点：
+只要满足on条件，有几行算几行
+
+例如：
+select a.* b.deptno,b.dname from emp a left join dept b on a.deptno=b.deptno;
+
+select a.* b.deptno,b.dname from emp a right join dept b on a.deptno=b.deptno;
+创建db，user
+
+create database 数据库名;
+grant all privileges on 数据库名.* to 某个用户名@'%' identified by '密码';
+flush privileges;
+注意点
+
+只要涉及权限修改，必须执行flush privileges;
+
+% 允许所有的IP都可以访问（权限危险）
+192.168.%.%
+创建用户并授权，同时限制只能在某个IP或者IP段上的机器才能访问
+
+谨记：
+    flush privileges; 或者重启MySQL服务
+补充点
+
+1.登录
+    mysql -uroot -p123456 -h127.0.0.1
+2.dbeaver(企业使用的软件)
+mysqladmin环境变量
+
+vi .bash_profile
+
+# .bash_profile
+# Get the aliases and functions
+
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+export MYSQL_BASE=/usr/local/mysql
+export PATH=${MYSQL_BASE}/bin:$PATH
+
+PS1=`uname -n`":"'$USER'":"'$PWD'":>"; export PS1
